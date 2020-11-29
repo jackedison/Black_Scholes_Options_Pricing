@@ -30,6 +30,15 @@ double call_price(double s, double k, double r, double t, double v, double d = 0
     return call_px;
 }
 
+double put_price(double s, double k, double r, double t, double v, double d = 0){
+    // Parameters: s Stock Price, k Strike price, r Risk free rate, t Time to maturity (years), v Volatility, d Dividend yield = 0
+    // Returns: Call price in $
+    double d1 = calc_d1(s, k, r, t, v, d);
+    double d2 = calc_d2(d1, t, v);
+    double put_px = k * pow(exp(1), -r * t) * n(-d2) - s * pow(exp(1), -d * t) * n(-d1);
+    return put_px;
+}
+
 int main(){
     // Input parameters
     double spot_price = 300;
@@ -41,9 +50,11 @@ int main(){
 
     // Black-Scholes calculations
     double call_px = call_price(spot_price, strike_price, risk_free_rate, time_to_expiration, volatility, dividend_yield);
+    double put_px = put_price(spot_price, strike_price, risk_free_rate, time_to_expiration, volatility, dividend_yield);
 
 
     cout << "Call price: $" << call_px << endl;
+    cout << "Put price: $" << put_px << endl;
     return 1;
 }
 
